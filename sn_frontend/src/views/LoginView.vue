@@ -14,7 +14,8 @@
           dolor sit mate.
         </p>
         <p class="font-bold">
-          Don't have an account? <RouterLink :to="{'name': 'singup'}" class="underline">Click here</RouterLink> to
+          Don't have an account? <RouterLink :to="{ 'name': 'singup' }"
+            class="underline">Click here</RouterLink> to
           create!
         </p>
       </div>
@@ -42,4 +43,5 @@
         </form>
       </div>
     </div>
-</div></template>
+  </div>
+</template>

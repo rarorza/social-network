@@ -54,12 +54,13 @@ import { RouterView } from 'vue-router'
 
         <div class="menu-right">
           <a href="#">
-            <img src="https://i.pravatar.cc/40?img=70" class="rounded-full">
+            <img src="https://i.pravatar.cc/40?img=12" class="rounded-full">
           </a>
         </div>
       </div>
     </div>
   </nav>
+  
   <main class="px-8 py-6 bg-gray-100">
     <RouterView />
   </main>
