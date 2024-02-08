@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { useToastStore } from '@/stores/toast';
 import axios from 'axios';
+import FlashNotification from '@/components/FlashNotification.vue';
 
 const toastStore = useToastStore()
 
@@ -12,6 +13,7 @@ const form = ref({
   password2: '',
 })
 const errors = ref([])
+const classes = ref('')
 
 function submitForm() {
   errors.value = []
@@ -28,6 +30,7 @@ function submitForm() {
   if (form.value.password2 !== form.value.password1) {
     errors.value.push('The password does not match')
   }
+  classes.value = 'bg-red-300'
   
   if (errorsLength.value === 0) {
     axios.post('/api/signup/', form.value).then(response => {
@@ -104,12 +107,8 @@ const errorsLength = computed(() => {
             <input v-model="form.password2" type="password" placeholder="Repeat your password"
               class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">
           </div>
-          
-          <template v-if="errorsLength > 0">
-            <div class="bg-red-300 text-white rounded-lg p-6">
-              <p v-for="error in errors" :key="error">{{ error }}</p>
-            </div>
-          </template>
+
+          <FlashNotification :errorsProps="errors" :classesProps="classes"/>
 
           <div>
             <button class="py-4 px-6 bg-purple-600 text-white rounded-lg">
