@@ -16,6 +16,7 @@ export const useUserStore = defineStore({
   }),
   actions: {
     initStore() {
+      console.log('initStore')
       if (localStorage.getItem('user.access')) {
         this.user.access = localStorage.getItem('user.access')
         this.user.refresh = localStorage.getItem('user.refresh')
@@ -29,7 +30,7 @@ export const useUserStore = defineStore({
         console.log('Initialized user:', this.user)
       }
     },
-    setToken() {
+    setToken(data) {
       console.log('setToken', data)
 
       this.user.access = data.access
@@ -73,7 +74,7 @@ export const useUserStore = defineStore({
         refresh Token will be verify if the token witch was stored in browser
         is valid
       */
-      axios.post('/api/account/refresh', {
+      axios.post('/api/refresh/', {
         refresh: this.user.refresh
       }).then((response) => {
         this.user.access = response.data.access

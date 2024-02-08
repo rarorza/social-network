@@ -1,6 +1,12 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import FlashNotification from '@/components/FlashNotification.vue';
+import { useUserStore } from '@/stores/user';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+
+const userStore = useUserStore()
+const router = useRouter()
 
 const form = ref({
   email: '',
@@ -9,9 +15,37 @@ const form = ref({
 const errors = ref([])
 const classes = ref('')
 
-function submitForm() {
-  
+async function submitForm() {
+  errors.value = []
+
+  if (form.value.email === '') {
+    errors.value.push('Your e-mail is missing')
+  }
+  if (form.value.password === '') {
+    errors.value.push('Your password is missing')
+  }
+  classes.value = 'bg-red-300'
+
+  if (errorsLength.value === 0) {
+    await axios.post('/api/login/', form.value).then(response => {
+      userStore.setToken(response.data)  // Store jwt in browser
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access
+    }).catch(error => {
+      console.log('error', error)
+    })
+    
+    await axios.get('/api/me/').then(response => {
+      userStore.setUserInfo(response.data)// Store email, name and id in browser
+      router.push('/feed')
+    }).catch(error => {
+      console.log('error', error)
+    })
+  }
 }
+
+const errorsLength = computed(() => {
+  return Object.keys(errors.value).length
+})
 </script>
 
 <template>
