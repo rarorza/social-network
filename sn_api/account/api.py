@@ -27,4 +27,4 @@ def signup(request):
         form.save()
     else:
         message = "error"
-    return JsonResponse({"status": message})
+    return JsonResponse({"message": message})
