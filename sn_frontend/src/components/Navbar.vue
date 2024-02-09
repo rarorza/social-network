@@ -1,4 +1,6 @@
 <script setup>
+import { useUserStore } from '@/stores/user';
+const userStore = useUserStore()
 
 </script>
 
@@ -10,7 +12,7 @@
           <a href="#" class="text-xl">SN</a>
         </div>
 
-        <div class="menu-center flex space-x-12">
+        <div class="menu-center flex space-x-12" v-if="userStore.user.isAuthenticated">
           <RouterLink :to="{name: 'feed'}" class="text-purple-700">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
               viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -53,9 +55,15 @@
         </div>
 
         <div class="menu-right">
-          <a href="#">
-            <img src="https://i.pravatar.cc/40?img=12" class="rounded-full">
-          </a>
+          <template v-if="userStore.user.isAuthenticated">
+            <a href="#">
+              <img src="https://i.pravatar.cc/40?img=12" class="rounded-full">
+            </a>
+          </template>
+          <template v-else>
+            <RouterLink :to="{name: 'login'}" class="mr-4 py-2 px-4 bg-gray-600 text-white rounded-lg">Log in</RouterLink>
+            <RouterLink :to="{name: 'signup'}" class="py-2 px-4 bg-purple-600 text-white rounded-lg">Sign up</RouterLink>
+          </template>
         </div>
       </div>
     </div>
