@@ -35,7 +35,7 @@ async function submitForm() {
     })
     
     await axios.get('/api/me/').then(response => {
-      userStore.setUserInfo(response.data)// Store email, name and id in browser
+      userStore.setUserInfo(response.data)  // Store email, name and id in browser
       router.push('/feed')
     }).catch(error => {
       console.log('error', error)
