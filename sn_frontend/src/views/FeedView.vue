@@ -47,9 +47,7 @@ export default {
 
 <template>
   <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
-    <ProfileCard />
-
-    <div class="main-center col-span-2 space-y-4">
+    <div class="main-center col-span-3 space-y-4">
       <div class="bg-white border border-gray-200 rounded-lg">
         <form @submit.prevent="submitForm" method="post">
           <div class="p-4">

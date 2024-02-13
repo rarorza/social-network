@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     getFeed() {
-      axios.get('/api/posts/').then(response => {
+      axios.get(`/api/posts/profile/${this.$route.params.id}/`).then(response => {
         console.log('data', response.data)
         this.posts = response.data
       }).catch(error => {
