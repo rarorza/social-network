@@ -1,23 +1,46 @@
-<script setup>
+<script>
 import PeopleYouMayKnow from '@/components/PeopleYouMayKnow.vue';
 import Trends from '@/components/Trends.vue';
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
 
-const posts = ref([])
+export default {
+  name: 'FeedView',
+  components:{
+    PeopleYouMayKnow,
+    Trends
+  },
+  data() {
+    return {
+      posts: [],
+      body: '',
+    }
+  },
+  mounted() {
+    this.getFeed()
+  },
+  methods: {
+    getFeed() {
+      axios.get('/api/posts/').then(response => {
+        console.log('data', response.data)
+        this.posts = response.data
+      }).catch(error => {
+        console.log('Error', error);
+      })
+    },
+    submitForm() {
+      axios.post('/api/posts/create/', {
+        'body': this.body
+      }).then(response => {
+        console.log('data', response)
 
-function getFeed() {
-  axios.get('/api/posts/').then(response => {
-    posts.value = response.data
-  }).catch(error => {
-    console.log('Error', error);
-  })
+        this.posts.unshift(response.data)
+        this.body = ''
+      }).catch(error => {
+        console.log('Error', error);
+      })
+    }
+  }
 }
-
-onMounted(() => {
-  getFeed()
-})
-
 </script>
 
 <template>
@@ -37,19 +60,21 @@ onMounted(() => {
 
     <div class="main-center col-span-2 space-y-4">
       <div class="bg-white border border-gray-200 rounded-lg">
-        <div class="p-4">
-          <textarea class="p-4 w-full bg-gray-100 rounded-lg"
+        <form @submit.prevent="submitForm" method="post">
+          <div class="p-4">
+            <textarea v-model="body" class="p-4 w-full bg-gray-100 rounded-lg"
             placeholder="What are you thinking about?"></textarea>
-        </div>
-
-        <div class="p-4 border-t border-gray-100 flex justify-between">
-          <a href="#"
+          </div>
+          
+          <div class="p-4 border-t border-gray-100 flex justify-between">
+            <a href="#"
             class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg">Attach
             image</a>
-
-          <a href="#"
-            class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Post</a>
-        </div>
+            
+            <button href="#"
+            class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Post</button>
+          </div>
+        </form>
       </div>
 
       <div 
