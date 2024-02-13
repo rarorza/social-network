@@ -1,6 +1,23 @@
 <script setup>
 import PeopleYouMayKnow from '@/components/PeopleYouMayKnow.vue';
 import Trends from '@/components/Trends.vue';
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
+
+const posts = ref([])
+
+function getFeed() {
+  axios.get('/api/posts/').then(response => {
+    posts.value = response.data
+  }).catch(error => {
+    console.log('Error', error);
+  })
+}
+
+onMounted(() => {
+  getFeed()
+})
+
 </script>
 
 <template>
@@ -35,21 +52,26 @@ import Trends from '@/components/Trends.vue';
         </div>
       </div>
 
-      <div class="p-4 bg-white border border-gray-200 rounded-lg">
+      <div 
+        class="p-4 bg-white border border-gray-200 rounded-lg"
+        v-for="post in posts" :key="post.id"
+      >
         <div class="mb-6 flex items-center justify-between">
           <div class="flex items-center space-x-6">
             <img src="https://i.pravatar.cc/300?img=12"
               class="w-[40px] rounded-full">
 
-            <p><strong>Name placeholder</strong></p>
+            <p><strong>{{ post.created_by.name }}</strong></p>
           </div>
 
-          <p class="text-gray-600">0 minutes ago</p>
+          <p class="text-gray-600">{{ post.created_at_formatted }} ago</p>
         </div>
 
         <img
-          src="https://assets.imgix.net/setup/serving-swimmer.jpg?crop=entropy&fit=crop&h=300&w=900"
-          class="w-full rounded-lg">
+        src="https://assets.imgix.net/setup/serving-swimmer.jpg?crop=entropy&fit=crop&h=300&w=900"
+        class="w-full rounded-lg">
+        
+        <p>{{ post.body }}</p>
 
         <div class="my-6 flex justify-between">
           <div class="flex space-x-6">

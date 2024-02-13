@@ -2,6 +2,7 @@ import uuid
 
 from account.models import User
 from django.db import models
+from django.utils.timesince import timesince
 
 
 class PostAttachment(models.Model):
@@ -20,3 +21,9 @@ class Post(models.Model):
     created_by = models.ForeignKey(
         User, related_name="posts", on_delete=models.CASCADE
     )  # noqa 501
+
+    class Meta:
+        ordering = ("-created_at",)
+
+    def created_at_formatted(self):
+        return timesince(self.created_at)
