@@ -56,9 +56,9 @@ const userStore = useUserStore()
 
         <div class="menu-right">
           <template v-if="userStore.user.isAuthenticated">
-            <a href="#">
+            <RouterLink :to="{name: 'profile', params: {'id': userStore.user.id}}">
               <img src="https://i.pravatar.cc/40?img=12" class="rounded-full">
-            </a>
+            </RouterLink>
           </template>
           <template v-else>
             <RouterLink :to="{name: 'login'}" class="mr-4 py-2 px-4 bg-gray-600 text-white rounded-lg">Log in</RouterLink>

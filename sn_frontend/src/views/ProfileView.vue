@@ -1,11 +1,18 @@
 <script>
 import PeopleYouMayKnow from '@/components/PeopleYouMayKnow.vue';
 import Trends from '@/components/Trends.vue';
+import { useUserStore } from '@/stores/user';
 import axios from 'axios';
 import ProfileCard from '@/components/ProfileCard.vue';
 
 export default {
   name: 'FeedView',
+  setup() {
+    const userStore = useUserStore()
+    return {
+      userStore
+    }
+  },
   components:{
     PeopleYouMayKnow,
     Trends,
