@@ -1,51 +1,106 @@
 <script setup>
 import PeopleYouMayKnow from '@/components/PeopleYouMayKnow.vue';
 import Trends from '@/components/Trends.vue';
+import axios from 'axios';
+import { ref, computed } from 'vue';
+
+const query = ref('')
+const users = ref([])
+const posts = ref([])
+
+function submitForm() {
+  console.log('submitform', query);
+
+  if (query.value.length >= 2) {
+    axios.post('/api/search/', {
+      query: query.value
+    }).then(response => {
+      console.log('response:', response.data);
+
+      users.value = response.data.users
+      posts.value = response.data.posts
+    }).catch(error => {
+      console.log('error:', error);
+    })
+  }
+}
+
+
+const usersLenght = computed(() => {
+  return Object.keys(users.value).length
+})
 </script>
 
 <template>
   <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
     <div class="main-center col-span-3 space-y-4">
       <div class="bg-white border border-gray-200 rounded-lg">
-        <div class="p-4 flex space-x-4">
-          <input type="search" class="p-4 w-full bg-gray-100 rounded-lg"
+
+        <form @submit.prevent="submitForm" class="p-4 flex space-x-4">
+          <input v-model="query" type="search"
+            class="p-4 w-full bg-gray-100 rounded-lg"
             placeholder="What are you looking for?">
 
-          <a href="#"
-            class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Post</a>
-        </div>
+          <button
+            class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+              viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+              class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z">
+              </path>
+            </svg>
+          </button>
+        </form>
+
       </div>
 
       <div
-        class="p-4 bg-white border border-gray-200 rounded-lg grid grid-cols-4 gap-4">
-        <div class="p-4 text-center bg-gray-100 rounded-lg">
+        class="p-4 bg-white border border-gray-200 rounded-lg grid grid-cols-4 gap-4"
+        v-if="usersLenght">
+        <div class="p-4 text-center bg-gray-100 rounded-lg" v-for="user in users"
+          :key="user.id">
           <img src="https://i.pravatar.cc/300?img=45" class="mb-6 rounded-full">
 
-          <p><strong>Name placeholder</strong></p>
+          <p>
+            <strong>
+              <RouterLink :to="{ name: 'profile', params: { 'id': user.id } }">{{
+                user.name }}</RouterLink>
+            </strong>
+          </p>
 
           <div class="mt-6 flex space-x-8 justify-around">
             <p class="text-xs text-gray-500">0 friends</p>
             <p class="text-xs text-gray-500">0 posts</p>
           </div>
         </div>
-        
+
       </div>
 
-      <div class="p-4 bg-white border border-gray-200 rounded-lg">
+      <div class="p-4 bg-white border border-gray-200 rounded-lg"
+        v-for="post in posts" :key="post.id">
         <div class="mb-6 flex items-center justify-between">
           <div class="flex items-center space-x-6">
-            <img src="https://i.pravatar.cc/300?img=45"
-              class="w-[40px] rounded-full">
+            <RouterLink
+              :to="{ name: 'profile', params: { 'id': post.created_by.id } }">
+              <img src="https://i.pravatar.cc/300?img=12"
+                class="w-[40px] rounded-full">
+            </RouterLink>
 
-            <p><strong>Name placeholder</strong></p>
+            <RouterLink
+              :to="{ name: 'profile', params: { 'id': post.created_by.id } }">
+              <p><strong>{{ post.created_by.name }}</strong></p>
+            </RouterLink>
           </div>
 
-          <p class="text-gray-600">0 minutes ago</p>
+          <p class="text-gray-600">{{ post.created_at_formatted }} ago</p>
         </div>
 
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim totam quisquam itaque. Quos neque nam natus ipsa labore aliquid sit?
-        </p>
+        <img
+          src="https://assets.imgix.net/setup/serving-swimmer.jpg?crop=entropy&fit=crop&h=300&w=900"
+          class="w-full rounded-lg">
+
+        <p>{{ post.body }}</p>
 
         <div class="my-6 flex justify-between">
           <div class="flex space-x-6">
@@ -85,6 +140,7 @@ import Trends from '@/components/Trends.vue';
           </div>
         </div>
       </div>
+
     </div>
 
     <div class="main-right col-span-1 space-y-4">
