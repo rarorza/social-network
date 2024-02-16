@@ -30,6 +30,17 @@ export default {
   mounted() {
     this.getFeed()
   },
+  watch: {
+    // watching if url change, ex when user visit someone else profile and click
+    // to go for another profile
+    '$route.params.id': {
+      handler: function () {
+        this.getFeed()
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   methods: {
     getFeed() {
       axios.get(`/api/posts/profile/${this.$route.params.id}/`).then(response => {
