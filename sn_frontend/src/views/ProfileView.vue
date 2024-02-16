@@ -21,6 +21,7 @@ export default {
   data() {
     return {
       posts: [],
+      user: {},
       body: '',
     }
   },
@@ -31,7 +32,9 @@ export default {
     getFeed() {
       axios.get(`/api/posts/profile/${this.$route.params.id}/`).then(response => {
         console.log('data', response.data)
-        this.posts = response.data
+
+        this.posts = response.data.posts
+        this.user = response.data.user
       }).catch(error => {
         console.log('Error', error);
       })
@@ -54,7 +57,7 @@ export default {
 
 <template>
   <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
-    <ProfileCard />
+    <ProfileCard :username="user.name" />
 
     <div class="main-center col-span-2 space-y-4">
       <div class="bg-white border border-gray-200 rounded-lg">

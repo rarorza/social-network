@@ -1,8 +1,5 @@
 <script setup>
-import { useUserStore } from '@/stores/user'
-
-const userStore = useUserStore()
-
+const props = defineProps({username: String})
 </script>
 
 <template>
@@ -10,7 +7,7 @@ const userStore = useUserStore()
     <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
       <img src="https://i.pravatar.cc/300?img=12" class="mb-6 rounded-full">
 
-      <p><strong>{{ userStore.user.name }}</strong></p>
+      <p><strong>{{ props.username }}</strong></p>
 
       <div class="mt-6 flex space-x-8 justify-around">
         <p class="text-xs text-gray-500">0 friends</p>
