@@ -72,10 +72,14 @@ export default {
       >
         <div class="mb-6 flex items-center justify-between">
           <div class="flex items-center space-x-6">
-            <img src="https://i.pravatar.cc/300?img=12"
-              class="w-[40px] rounded-full">
+            <RouterLink :to="{name: 'profile', params: {'id': post.created_by.id}}">
+              <img src="https://i.pravatar.cc/300?img=12"
+                class="w-[40px] rounded-full">
+            </RouterLink>
 
-            <p><strong>{{ post.created_by.name }}</strong></p>
+            <RouterLink :to="{name: 'profile', params: {'id': post.created_by.id}}">
+              <p><strong>{{ post.created_by.name }}</strong></p>
+            </RouterLink>
           </div>
 
           <p class="text-gray-600">{{ post.created_at_formatted }} ago</p>
