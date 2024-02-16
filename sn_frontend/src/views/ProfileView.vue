@@ -60,7 +60,7 @@ export default {
     <ProfileCard :username="user.name" />
 
     <div class="main-center col-span-2 space-y-4">
-      <div class="bg-white border border-gray-200 rounded-lg">
+      <div v-if="userStore.user.id === user.id" class="bg-white border border-gray-200 rounded-lg">
         <form @submit.prevent="submitForm" method="post">
           <div class="p-4">
             <textarea v-model="body" class="p-4 w-full bg-gray-100 rounded-lg"
