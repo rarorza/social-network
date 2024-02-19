@@ -38,6 +38,11 @@ const router = createRouter({
       path: '/profile/:id',
       name: 'profile',
       component: () => import('../views/ProfileView.vue')
+    },
+    {
+      path: '/profile/:id/friends',
+      name: 'friends',
+      component: () => import('../views/FriendsView.vue')
     }
   ]
 })

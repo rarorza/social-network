@@ -27,7 +27,7 @@ function submitForm() {
 }
 
 
-const usersLenght = computed(() => {
+const usersLength = computed(() => {
   return Object.keys(users.value).length
 })
 </script>
@@ -58,7 +58,7 @@ const usersLenght = computed(() => {
 
       <div
         class="p-4 bg-white border border-gray-200 rounded-lg grid grid-cols-4 gap-4"
-        v-if="usersLenght">
+        v-if="usersLength">
         <div class="p-4 text-center bg-gray-100 rounded-lg" v-for="user in users"
           :key="user.id">
           <img src="https://i.pravatar.cc/300?img=45" class="mb-6 rounded-full">
@@ -71,7 +71,7 @@ const usersLenght = computed(() => {
           </p>
 
           <div class="mt-6 flex space-x-8 justify-around">
-            <p class="text-xs text-gray-500">0 friends</p>
+            <p class="text-xs text-gray-500">{{ user.friends_count }} friends</p>
             <p class="text-xs text-gray-500">0 posts</p>
           </div>
         </div>

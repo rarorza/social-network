@@ -1,12 +1,12 @@
 <script setup>
 import { useRoute } from 'vue-router';
-import axios from 'axios'
+import axios from 'axios';
 
 const route = useRoute()
-const props = defineProps({username: String})
+const props = defineProps({user: Object})
 
 function sendFriendshipRequest() {
-  axios.post(`/api/friends/request/${route.params.id}/`).then(response => {
+  axios.post(`/api/friends/${route.params.id}/request/`).then(response => {
     console.log('data', response.data)
   }).catch(error => {
     console.log('error', error)
@@ -19,10 +19,10 @@ function sendFriendshipRequest() {
     <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
       <img src="https://i.pravatar.cc/300?img=12" class="mb-6 rounded-full">
 
-      <p><strong>{{ props.username }}</strong></p>
+      <p><strong>{{ props.user.name }}</strong></p>
 
       <div class="mt-6 flex space-x-8 justify-around">
-        <p class="text-xs text-gray-500">0 friends</p>
+        <RouterLink :to="{name: 'friends', params: props.user.id}" class="text-xs text-gray-500">{{ props.user.friends_count }} friends</RouterLink>
         <p class="text-xs text-gray-500">0 posts</p>
       </div>
 

@@ -7,6 +7,7 @@ from rest_framework.decorators import (
 )
 
 from .forms import SignupForm
+from .serializers import FriendshipResquestSerializer, UserSerializer
 
 
 @api_view(["GET"])
@@ -43,11 +44,61 @@ def signup(request):
     return JsonResponse({"message": message})
 
 
+@api_view(["GET"])
+def friends(request, id):
+    user = User.objects.get(pk=id)
+    friendship_requests = []
+
+    if user == request.user:
+        friendship_requests = FriendshipResquest.objects.filter(
+            created_for=request.user, status=FriendshipResquest.SENT
+        )
+    friends = user.friends.all()
+
+    user_serializer = UserSerializer(user)
+    friends_serializer = UserSerializer(friends, many=True)
+    friendship_requests_serializer = FriendshipResquestSerializer(
+        friendship_requests,
+        many=True,
+    )
+
+    return JsonResponse(
+        {
+            "user": user_serializer.data,
+            "friends": friends_serializer.data,
+            "requests": friendship_requests_serializer.data,
+        },
+        safe=False,
+    )
+
+
 @api_view(["POST"])
 def send_friendship_request(request, id):
     user = User.objects.get(pk=id)
-    friendship_request = FriendshipResquest(
+    friendship_request = FriendshipResquest.objects.create(
         created_for=user,
         created_by=request.user,
     )
-    return JsonResponse({"message": id})
+    return JsonResponse({"message": "friendship request created"})
+
+
+@api_view(["POST"])
+def handle_friendship_request(request, id, status):
+    user_sent = User.objects.get(pk=id)
+    user_receive = request.user
+
+    friendship_request = FriendshipResquest.objects.filter(
+        created_for=user_receive
+    ).get(created_by=user_sent)
+    friendship_request.status = status
+    friendship_request.save()
+
+    user_sent.friends.add(user_receive)
+    user_sent.friends_count += 1
+    user_sent.save()
+
+    user_receive.friends.add(user_sent)
+    user_receive.friends_count += 1
+    user_receive.save()
+
+    return JsonResponse({"message": "friendship request updated"})

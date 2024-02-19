@@ -7,7 +7,7 @@ import ProfileCard from '@/components/ProfileCard.vue';
 import FeedCard from '@/components/FeedCard.vue';
 
 export default {
-  name: 'FeedView',
+  name: 'ProfileView',
   setup() {
     const userStore = useUserStore()
     return {
@@ -70,7 +70,7 @@ export default {
 
 <template>
   <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
-    <ProfileCard :username="user.name" />
+    <ProfileCard :user="user" />
 
     <div class="main-center col-span-2 space-y-4">
       <div v-if="userStore.user.id === user.id" class="bg-white border border-gray-200 rounded-lg">
