@@ -38,7 +38,7 @@ function sendFriendshipRequest() {
       <p><strong>{{ props.user.name }}</strong></p>
 
       <div class="mt-6 flex space-x-8 justify-around">
-        <RouterLink :to="{ name: 'friends', params: props.user.id }"
+        <RouterLink :to="{ name: 'friends', params: {id: props.user.id} }"
           class="text-xs text-gray-500">{{ props.user.friends_count }} friends
         </RouterLink>
         <p class="text-xs text-gray-500">0 posts</p>

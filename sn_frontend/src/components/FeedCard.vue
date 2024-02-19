@@ -18,10 +18,6 @@ const props = defineProps({post: Object})
     <p class="text-gray-600">{{ post.created_at_formatted }} ago</p>
   </div>
 
-  <img
-    src="https://assets.imgix.net/setup/serving-swimmer.jpg?crop=entropy&fit=crop&h=300&w=900"
-    class="w-full rounded-lg">
-
   <p>{{ post.body }}</p>
 
   <div class="my-6 flex justify-between">

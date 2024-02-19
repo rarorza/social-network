@@ -23,7 +23,9 @@ export default {
   data() {
     return {
       posts: [],
-      user: {},
+      user: {
+        id: null,
+      },
       body: '',
     }
   },
