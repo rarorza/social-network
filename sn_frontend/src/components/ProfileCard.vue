@@ -1,11 +1,14 @@
 <script setup>
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { useToastStore } from '@/stores/toast';
+import { useUserStore } from '@/stores/user';
 
 const toastStore = useToastStore()
+const userStore = useUserStore()
 
 const route = useRoute()
+const router = useRouter()
 const props = defineProps({ user: Object })
 
 function sendFriendshipRequest() {
@@ -28,6 +31,11 @@ function sendFriendshipRequest() {
     console.log('error', error)
   })
 }
+
+function logout() {
+  userStore.removeToken()
+  router.push('/login')
+}
 </script>
 
 <template>
@@ -45,8 +53,15 @@ function sendFriendshipRequest() {
       </div>
 
       <div class="mt-6">
-        <button @click="sendFriendshipRequest"
-          class="inline-block py-4 px-3 bg-purple-600 text-xs text-white rounded-lg">Follow</button>
+        <button v-if="userStore.user.id !== props.user.id" @click="sendFriendshipRequest"
+          class="inline-block py-4 px-3 bg-purple-600 text-xs text-white rounded-lg">
+          Follow
+        </button>
+        
+        <button v-if="userStore.user.id === props.user.id" @click="logout"
+          class="inline-block py-4 px-3 bg-red-600 text-xs text-white rounded-lg">
+          Log out
+        </button>
       </div>
     </div>
 </div></template>
