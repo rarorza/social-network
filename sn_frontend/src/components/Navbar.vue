@@ -1,6 +1,9 @@
 <script setup>
 import { useUserStore } from '@/stores/user';
+import { ref } from 'vue';
+
 const userStore = useUserStore()
+const idUser = ref(userStore.user.id)
 
 </script>
 
@@ -56,7 +59,7 @@ const userStore = useUserStore()
 
         <div class="menu-right">
           <template v-if="userStore.user.isAuthenticated">
-            <RouterLink :to="{name: 'profile', params: {'id': userStore.user.id}}">
+            <RouterLink :to="{name: 'profile', params: {id: idUser}}">
               <img src="https://i.pravatar.cc/40?img=12" class="rounded-full">
             </RouterLink>
           </template>

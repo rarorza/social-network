@@ -1,9 +1,9 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import Navbar from './components/Navbar.vue';
-import ToastNotification from './components/ToastNotification.vue';
 import { useUserStore } from './stores/user';
 import axios from 'axios';
+import Navbar from './components/Navbar.vue';
+import ToastNotification from './components/ToastNotification.vue';
 
 const userStore = useUserStore()
 userStore.initStore()
