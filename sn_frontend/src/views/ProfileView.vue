@@ -14,7 +14,7 @@ export default {
       userStore
     }
   },
-  components:{
+  components: {
     PeopleYouMayKnow,
     Trends,
     ProfileCard,
@@ -55,16 +55,18 @@ export default {
       })
     },
     submitForm() {
-      axios.post('/api/posts/create/', {
-        'body': this.body
-      }).then(response => {
-        console.log('data', response)
+      if (this.body != '') {
+        axios.post('/api/posts/create/', {
+          'body': this.body
+        }).then(response => {
+          console.log('data', response)
 
-        this.posts.unshift(response.data)
-        this.body = ''
-      }).catch(error => {
-        console.log('Error', error);
-      })
+          this.posts.unshift(response.data)
+          this.body = ''
+        }).catch(error => {
+          console.log('Error', error);
+        })
+      }
     }
   }
 }
@@ -75,29 +77,28 @@ export default {
     <ProfileCard :user="user" />
 
     <div class="main-center col-span-2 space-y-4">
-      <div v-if="userStore.user.id === user.id" class="bg-white border border-gray-200 rounded-lg">
+      <div v-if="userStore.user.id === user.id"
+        class="bg-white border border-gray-200 rounded-lg">
         <form @submit.prevent="submitForm" method="post">
           <div class="p-4">
             <textarea v-model="body" class="p-4 w-full bg-gray-100 rounded-lg"
-            placeholder="What are you thinking about?"></textarea>
+              placeholder="What are you thinking about?"></textarea>
           </div>
-          
+
           <div class="p-4 border-t border-gray-100 flex justify-between">
             <a href="#"
-            class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg">Attach
-            image</a>
-            
+              class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg">Attach
+              image</a>
+
             <button href="#"
-            class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Post</button>
+              class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Post</button>
           </div>
         </form>
       </div>
 
-      <div 
-        class="p-4 bg-white border border-gray-200 rounded-lg"
-        v-for="post in posts" :key="post.id"
-      >
-      <FeedCard :post="post" />
+      <div class="p-4 bg-white border border-gray-200 rounded-lg"
+        v-for="post in posts" :key="post.id">
+        <FeedCard :post="post" />
       </div>
     </div>
 
