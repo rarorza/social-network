@@ -1,9 +1,11 @@
 <script setup>
 import { useUserStore } from '@/stores/user';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const userStore = useUserStore()
-const idUser = ref(userStore.user.id)
+
+const isAuthenticated = computed(() => userStore.user.isAuthenticated)
+const userId = ref(userStore.user.id)
 
 </script>
 
@@ -15,7 +17,7 @@ const idUser = ref(userStore.user.id)
           <a href="#" class="text-xl">SN</a>
         </div>
 
-        <div class="menu-center flex space-x-12" v-if="userStore.user.isAuthenticated">
+        <div class="menu-center flex space-x-12" v-if="isAuthenticated">
           <RouterLink :to="{name: 'feed'}" class="text-purple-700">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
               viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -58,8 +60,8 @@ const idUser = ref(userStore.user.id)
         </div>
 
         <div class="menu-right">
-          <template v-if="userStore.user.isAuthenticated">
-            <RouterLink :to="{name: 'profile', params: {id: idUser}}">
+          <template v-if="isAuthenticated">
+            <RouterLink :to="{name: 'profile', params: {id: userId}}">
               <img src="https://i.pravatar.cc/40?img=12" class="rounded-full">
             </RouterLink>
           </template>
