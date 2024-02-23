@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 
 from .forms import PostForm
 from .models import Like, Post
-from .serializers import PostSerializer
+from .serializers import PostDetailSerializer, PostSerializer
 
 
 @api_view(["GET"])
@@ -20,6 +20,13 @@ def post_list(request):
     serializer = PostSerializer(posts, many=True)
 
     return JsonResponse(serializer.data, safe=False)
+
+
+@api_view(["GET"])
+def post_detail(request, id):
+    post = Post.objects.get(pk=id)
+    post_serializer = PostDetailSerializer(post, many=True)
+    return JsonResponse({"post": post_serializer.data})
 
 
 @api_view(["GET"])

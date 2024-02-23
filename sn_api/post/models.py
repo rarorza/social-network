@@ -33,6 +33,9 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
     )
 
+    def created_at_formatted(self):
+        return timesince(self.created_at)
+
 
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
