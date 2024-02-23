@@ -2,7 +2,6 @@
 import PeopleYouMayKnow from '@/components/PeopleYouMayKnow.vue';
 import Trends from '@/components/Trends.vue';
 import axios from 'axios';
-import ProfileCard from '@/components/ProfileCard.vue';
 import FeedCard from '@/components/FeedCard.vue';
 
 export default {
@@ -10,7 +9,6 @@ export default {
   components: {
     PeopleYouMayKnow,
     Trends,
-    ProfileCard,
     FeedCard
   },
   data() {

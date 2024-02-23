@@ -25,7 +25,7 @@ def post_list(request):
 @api_view(["GET"])
 def post_detail(request, id):
     post = Post.objects.get(pk=id)
-    post_serializer = PostDetailSerializer(post, many=True)
+    post_serializer = PostDetailSerializer(post)
     return JsonResponse({"post": post_serializer.data})
 
 

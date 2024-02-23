@@ -44,7 +44,7 @@ function likePost(id) {
         <span class="text-gray-500 text-xs">{{ post.likes_count }} likes</span>
       </div>
 
-      <div class="flex items-center space-x-2">
+      <RouterLink :to="{name: 'post', params: {id: post.id}}" class="flex items-center space-x-2">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
           stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
           <path stroke-linecap="round" stroke-linejoin="round"
@@ -53,7 +53,7 @@ function likePost(id) {
         </svg>
 
         <span class="text-gray-500 text-xs">0 comments</span>
-      </div>
+      </RouterLink>
     </div>
 
     <div>
