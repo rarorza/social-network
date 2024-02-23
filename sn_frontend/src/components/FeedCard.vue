@@ -33,7 +33,7 @@ function likePost(id) {
 
   <div class="my-6 flex justify-between">
     <div class="flex space-x-6">
-      <div class="flex items-center space-x-2" @click="likePost(post.id)">
+      <div class="flex items-center space-x-2 cursor-pointer" @click="likePost(post.id)">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
           stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
           <path stroke-linecap="round" stroke-linejoin="round"
@@ -52,7 +52,7 @@ function likePost(id) {
           </path>
         </svg>
 
-        <span class="text-gray-500 text-xs">0 comments</span>
+        <span class="text-gray-500 text-xs">{{ post.comments_count }} comments</span>
       </RouterLink>
     </div>
 

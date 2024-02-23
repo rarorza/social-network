@@ -33,6 +33,9 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
     )
 
+    class Meta:
+        ordering = ("created_at",)
+
     def created_at_formatted(self):
         return timesince(self.created_at)
 

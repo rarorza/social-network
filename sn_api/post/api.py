@@ -4,8 +4,8 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 
 from .forms import PostForm
-from .models import Like, Post
-from .serializers import PostDetailSerializer, PostSerializer
+from .models import Comment, Like, Post
+from .serializers import CommentSerializer, PostDetailSerializer, PostSerializer
 
 
 @api_view(["GET"])
@@ -70,3 +70,20 @@ def post_like(request, id):
         post.save()
         return JsonResponse({"message": "like created"})
     return JsonResponse({"message": "post already liked"})
+
+
+@api_view(["POST"])
+def post_create_comment(request, id):
+
+    comment = Comment.objects.create(
+        body=request.data.get("body"),
+        created_by=request.user,
+    )
+
+    post = Post.objects.get(pk=id)
+    post.comments.add(comment)
+    post.comments_count += 1
+    post.save()
+
+    comment_serializer = CommentSerializer(comment)
+    return JsonResponse(comment_serializer.data, safe=False)

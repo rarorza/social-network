@@ -62,8 +62,7 @@ export default {
               class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg">Attach
               image</a>
 
-            <button href="#"
-              class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Post</button>
+            <button class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Post</button>
           </div>
         </form>
       </div>
