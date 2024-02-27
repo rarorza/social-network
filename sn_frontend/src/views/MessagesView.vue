@@ -1,5 +1,26 @@
 <script setup>
+import axios from 'axios';
+import { useUserStore } from '@/stores/user';
+import { ref, onMounted } from 'vue'
 
+const userStore = useUserStore()
+const conversations = ref([])
+
+function getConversation() {
+  console.log('getConversation');
+  
+  axios.get('/api/chat/').then(response => {
+    console.log(response.data);
+
+    conversations.value = response.data
+  }).catch(error => {
+    console.log(error);
+  })
+}
+
+onMounted(() => {
+  getConversation()
+})
 </script>
 
 <template>
@@ -7,16 +28,19 @@
     <div class="main-left col-span-1">
       <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
         <div class="space-y-4">
-          <div class="flex items-center justify-between">
+
+          <div v-for="conversation in conversations" :key="conversation.id" class="flex items-center justify-between">
             <div class="flex items-center space-x-2">
               <img src="https://i.pravatar.cc/300?img=43"
                 class="w-[40px] rounded-full">
-
-              <p class="text-xs"><strong>Name placeholder</strong></p>
+              <p v-for="user in conversation.users" :key="user.id" class="text-xs font-bold">
+                <template v-if="user.id !== userStore.user.id">{{ user.name }}</template>
+              </p>
             </div>
 
-            <span class="text-xs text-gray-500">0 minutes ago</span>
+            <span class="text-xs text-gray-500">{{ conversation.modified_at_formatted }}</span>
           </div>
+
         </div>
       </div>
     </div>
@@ -65,7 +89,7 @@
 
         <div class="p-4 border-t border-gray-100 flex justify-between">
           <a href="#"
-            class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Post</a>
+            class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Send</a>
         </div>
       </div>
     </div>
