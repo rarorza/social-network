@@ -2,6 +2,7 @@ import uuid
 
 from account.models import User
 from django.db import models
+from django.utils.timesince import timesince
 
 
 class Conversation(models.Model):
@@ -9,6 +10,9 @@ class Conversation(models.Model):
     users = models.ManyToManyField(User, related_name="conversations")
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
+
+    def modified_at_formatted(self):
+        return timesince(self.modified_at)
 
 
 class ConversationMessage(models.Model):
@@ -24,3 +28,6 @@ class ConversationMessage(models.Model):
     created_by = models.ForeignKey(
         User, related_name="send_messages", on_delete=models.CASCADE
     )
+
+    def created_at_formatted(self):
+        return timesince(self.created_at)
