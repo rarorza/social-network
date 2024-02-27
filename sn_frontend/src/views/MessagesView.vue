@@ -37,7 +37,7 @@ function getConversation() {
 }
 
 function submitForm() {
-  axios.post(`/api/chat/${activeConversation.value.id}/send/`, {
+  axios.post(`/api/chat/send/${activeConversation.value.id}/`, {
     body: body.value
   }).then(response => {
     activeConversation.value.messages.push(response.data)

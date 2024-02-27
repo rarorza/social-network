@@ -32,6 +32,15 @@ function sendFriendshipRequest() {
   })
 }
 
+function sendMessage() {
+  axios.get(`/api/chat/get-or-create/${route.params.id}/`).then(response => {
+    console.log('data', response.data);
+    router.push('/messages')
+  }).catch(error => {
+    console.log('error', error)
+  })
+}
+
 function logout() {
   userStore.removeToken()
   router.push('/login')
@@ -56,6 +65,11 @@ function logout() {
         <button v-if="userStore.user.id !== props.user.id" @click="sendFriendshipRequest"
           class="inline-block py-4 px-3 bg-purple-600 text-xs text-white rounded-lg">
           Follow
+        </button>
+
+        <button v-if="userStore.user.id !== props.user.id" @click="sendMessage"
+          class="inline-block ml-4 py-4 px-3 bg-purple-600 text-xs text-white rounded-lg">
+          Message
         </button>
         
         <button v-if="userStore.user.id === props.user.id" @click="logout"
