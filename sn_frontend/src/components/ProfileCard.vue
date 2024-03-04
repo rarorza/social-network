@@ -58,7 +58,7 @@ function logout() {
         <RouterLink :to="{ name: 'friends', params: {id: props.user.id} }"
           class="text-xs text-gray-500">{{ props.user.friends_count }} friends
         </RouterLink>
-        <p class="text-xs text-gray-500">0 posts</p>
+        <p class="text-xs text-gray-500">{{ props.user.posts_count }} posts</p>
       </div>
 
       <div class="mt-6">

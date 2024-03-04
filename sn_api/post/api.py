@@ -53,6 +53,11 @@ def post_create(request):
         post = form.save(commit=False)
         post.created_by = request.user
         post.save()
+
+        user = post.created_by
+        user.posts_count += 1
+        user.save()
+
         serializer = PostSerializer(post)
         return JsonResponse(serializer.data, safe=False)
     return JsonResponse(serializer.errors, status=400)

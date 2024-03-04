@@ -75,7 +75,7 @@ export default {
 
           <div class="mt-6 flex space-x-8 justify-around">
             <p class="text-xs text-gray-500">{{ friendshipRequest.created_by.friends_count }} friends</p>
-            <p class="text-xs text-gray-500">0 posts</p>
+            <p class="text-xs text-gray-500">{{ friendshipRequest.created_by.posts_count }} posts</p>
           </div>
 
           <div class="mt-6 space-x-4">
@@ -102,7 +102,7 @@ export default {
 
           <div class="mt-6 flex space-x-8 justify-around">
             <p class="text-xs text-gray-500">{{ friend.friends_count }} friends</p>
-            <p class="text-xs text-gray-500">0 posts</p>
+            <p class="text-xs text-gray-500">{{ friend.posts_count }} posts</p>
           </div>
         </div>
       </div>
