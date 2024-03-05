@@ -21,7 +21,11 @@ def post_list(request):
     for friend in request.user.friends.all():
         feed_users_ids.append(friend.id)
 
-    posts = Post.objects.filter(created_by_id__in=list(feed_users_ids))
+    trend = request.GET.get("trend", "")
+    if trend:
+        posts = Post.objects.filter(body__icontains="#" + trend)
+    else:
+        posts = Post.objects.filter(created_by_id__in=list(feed_users_ids))
     serializer = PostSerializer(posts, many=True)
 
     return JsonResponse(serializer.data, safe=False)
