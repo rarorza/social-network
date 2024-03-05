@@ -4,8 +4,13 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 
 from .forms import PostForm
-from .models import Comment, Like, Post
-from .serializers import CommentSerializer, PostDetailSerializer, PostSerializer
+from .models import Comment, Like, Post, Trend
+from .serializers import (
+    CommentSerializer,
+    PostDetailSerializer,
+    PostSerializer,
+    TrendSerializer,
+)
 
 
 @api_view(["GET"])
@@ -46,7 +51,6 @@ def post_list_profile(request, id):
 @api_view(["POST"])
 def post_create(request):
     form = PostForm(request.data)
-    print(request)
 
     if form.is_valid():
         # Commit is False because we need to delay for attach the user in form
@@ -92,3 +96,10 @@ def post_create_comment(request, id):
 
     comment_serializer = CommentSerializer(comment)
     return JsonResponse(comment_serializer.data, safe=False)
+
+
+@api_view(["GET"])
+def get_trends(request):
+    trends = Trend.objects.all()
+    serializer = TrendSerializer(trends, many=True)
+    return JsonResponse(serializer.data, safe=False)
