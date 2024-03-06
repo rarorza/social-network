@@ -5,6 +5,7 @@ import { useToastStore } from '@/stores/toast';
 import FlashNotification from '@/components/FlashNotification.vue';
 import { ref, computed } from 'vue';
 import router from '@/router';
+import { onMounted } from 'vue';
 
 const toastStore = useToastStore()
 const userStore = useUserStore()
@@ -13,6 +14,8 @@ const form = ref({
   email: userStore.user.email,
   name: userStore.user.name,
 })
+const file = ref(null)
+
 const errors = ref([])
 const classes = ref('')
 
@@ -28,10 +31,19 @@ function submitForm() {
   classes.value = 'bg-red-300'
   console.log('Hello');
 
-  
+
   if (errorsLength.value === 0) {
-    axios.post('/api/profile/edit/', form.value).then(response => {
-      if (response.data.message === 'information updated') {
+    let formData = new FormData()
+    formData.append('avatar', file.value)
+    formData.append('name', form.value.name)
+    formData.append('email', form.value.email)
+
+    axios.post('/api/profile/edit/', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    }).then(response => {
+      if (response.data.message === 'Information updated') {
         toastStore.showToast(
           5000,
           'The information was saved',
@@ -57,6 +69,13 @@ function submitForm() {
   }
 }
 
+function onFileChanged($event) {
+  const target = $event.target
+  if (target && target.files) {
+    file.value = target.files[0]
+  }
+}
+
 const errorsLength = computed(() => {
   return Object.keys(errors.value).length
 })
@@ -71,6 +90,11 @@ const errorsLength = computed(() => {
         <hr class="py-4">
         <form class="space-y-6" @submit.prevent="submitForm">
           <div>
+            <label>Avatar</label><br>
+            <input type="file" ref="file" @change="onFileChanged($event)"
+              accept="image/*" class="file-input">
+          </div>
+          <div>
             <label>Name</label><br>
             <input v-model="form.name" type="text" placeholder="Your full name"
               class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">
@@ -78,10 +102,11 @@ const errorsLength = computed(() => {
 
           <div>
             <label>E-mail</label><br>
-            <input v-model="form.email" type="email" placeholder="Your e-mail address"
+            <input v-model="form.email" type="email"
+              placeholder="Your e-mail address"
               class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">
           </div>
-          <FlashNotification :errorsProps="errors" :classesProps="classes"/>
+          <FlashNotification :errorsProps="errors" :classesProps="classes" />
 
           <div>
             <button class="py-4 px-6 bg-purple-600 text-white rounded-lg">
