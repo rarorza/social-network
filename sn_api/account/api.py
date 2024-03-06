@@ -22,6 +22,22 @@ def me(request):
 
 
 @api_view(["POST"])
+def profile_edit(request):
+    user = request.user
+    email = request.data.get("email")
+    name = request.data.get("name")
+    email_already_exist = User.objects.exclude(id=user.id).filter(email=email).exists()
+
+    if email_already_exist:
+        return JsonResponse({"message": "Email already exists"})
+    else:
+        user.email = email
+        user.name = name
+        user.save()
+        return JsonResponse({"message": "information updated"})
+
+
+@api_view(["POST"])
 @authentication_classes([])
 @permission_classes([])
 def signup(request):

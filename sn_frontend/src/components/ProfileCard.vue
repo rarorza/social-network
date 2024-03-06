@@ -55,14 +55,15 @@ function logout() {
       <p><strong>{{ props.user.name }}</strong></p>
 
       <div class="mt-6 flex space-x-8 justify-around">
-        <RouterLink :to="{ name: 'friends', params: {id: props.user.id} }"
+        <RouterLink :to="{ name: 'friends', params: { id: props.user.id } }"
           class="text-xs text-gray-500">{{ props.user.friends_count }} friends
         </RouterLink>
         <p class="text-xs text-gray-500">{{ props.user.posts_count }} posts</p>
       </div>
 
       <div class="mt-6">
-        <button v-if="userStore.user.id !== props.user.id" @click="sendFriendshipRequest"
+        <button v-if="userStore.user.id !== props.user.id"
+          @click="sendFriendshipRequest"
           class="inline-block py-4 px-3 bg-purple-600 text-xs text-white rounded-lg">
           Follow
         </button>
@@ -71,11 +72,18 @@ function logout() {
           class="inline-block ml-4 py-4 px-3 bg-purple-600 text-xs text-white rounded-lg">
           Message
         </button>
-        
+
+        <RouterLink :to="{ name: 'profileedit' }"
+          v-if="userStore.user.id === props.user.id"
+          class="inline-block mr-2 py-4 px-3 bg-gray-600 text-xs text-white rounded-lg">
+          Edit
+        </RouterLink>
+
         <button v-if="userStore.user.id === props.user.id" @click="logout"
           class="inline-block py-4 px-3 bg-red-600 text-xs text-white rounded-lg">
           Log out
         </button>
       </div>
     </div>
-</div></template>
+  </div>
+</template>

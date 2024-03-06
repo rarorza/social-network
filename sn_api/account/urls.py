@@ -8,6 +8,7 @@ urlpatterns = [
     path("signup/", api.signup, name="signup"),
     path("login/", TokenObtainPairView.as_view(), name="token_obtain"),
     path("refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("profile/edit/", api.profile_edit, name="profile_edit"),
     path("friends/<uuid:id>/", api.friends, name="friends"),
     path(
         "friends/<uuid:id>/request/",
