@@ -62,7 +62,7 @@ const userId = ref(userStore.user.id)
         <div class="menu-right">
           <template v-if="isAuthenticated">
             <RouterLink :to="{name: 'profile', params: {id: userId}}">
-              <img src="https://i.pravatar.cc/40?img=12" class="rounded-full">
+              <img :src="userStore.user.avatar" class="w-10 rounded-full">
             </RouterLink>
           </template>
           <template v-else>

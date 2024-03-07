@@ -3,8 +3,10 @@ import { ref, computed } from 'vue';
 import { useToastStore } from '@/stores/toast';
 import axios from 'axios';
 import FlashNotification from '@/components/FlashNotification.vue';
+import { useRouter } from 'vue-router';
 
 const toastStore = useToastStore()
+const router = useRouter()
 
 const form = ref({
   email: '',
@@ -44,6 +46,8 @@ function submitForm() {
         form.value.name = ''
         form.value.password1 = ''
         form.value.password2 = ''
+
+        router.push('/login')
       } else {
         toastStore.showToast(
           5000,

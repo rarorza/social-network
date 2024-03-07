@@ -61,16 +61,15 @@ onMounted(() => {
             @click="setActiveConversation(conversation)"
             class="flex items-center justify-between">
             <div class="flex items-center space-x-2">
-              <img src="https://i.pravatar.cc/300?img=43"
-                class="w-[40px] rounded-full">
-              <p v-for="user in conversation.users" :key="user.id"
-                class="text-xs font-bold">
-                <template v-if="user.id !== userStore.user.id">{{ user.name
-                }}</template>
-              </p>
+              <template v-for="user in conversation.users" :key="user.id">
+                <template v-if="user.id !== userStore.user.id">
+                  <img :src="user.get_avatar" class="w-[40px] rounded-full">
+                  <p class="text-xs font-bold">{{ user.name }}</p>
+                </template>
+              </template>
             </div>
             <span class="text-xs text-gray-500">{{
-              conversation.modified_at_formatted }}</span>
+            conversation.modified_at_formatted }}</span>
           </div>
 
         </div>
@@ -95,13 +94,13 @@ onMounted(() => {
                 </span>
               </div>
               <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300">
-                <img src="https://i.pravatar.cc/300?img=43"
+                <img :src="message.created_by.get_avatar"
                   class="w-[40px] rounded-full">
               </div>
             </div>
             <div v-else class="flex w-full mt-2 space-x-3 max-w-md">
               <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300">
-                <img src="https://i.pravatar.cc/300?img=12"
+                <img :src="message.created_by.get_avatar"
                   class="w-[40px] rounded-full">
               </div>
               <div>

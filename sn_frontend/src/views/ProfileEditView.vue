@@ -90,9 +90,9 @@ const errorsLength = computed(() => {
         <hr class="py-4">
         <form class="space-y-6" @submit.prevent="submitForm">
           <div>
-            <label>Avatar</label><br>
+            <label>Avatar</label>
             <input type="file" ref="file" @change="onFileChanged($event)"
-              accept="image/*" class="file-input">
+              accept="image/*" class="file-input py-2">
           </div>
           <div>
             <label>Name</label><br>

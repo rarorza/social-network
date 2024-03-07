@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "friends_count",
             "posts_count",
-            "avatar",
+            "get_avatar",
         )
 
 

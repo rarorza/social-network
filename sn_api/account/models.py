@@ -56,6 +56,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = []
 
+    def get_avatar(self) -> str | None:
+        if self.avatar:
+            return "http://127.0.0.1:8000" + self.avatar.url
+        return
+
 
 class FriendshipResquest(models.Model):
     SENT = "sent"
