@@ -55,7 +55,7 @@ def profile_edit(request):
 @permission_classes([])
 def signup(request):
     data = request.data
-    message = "success"
+    messages = "success"
 
     form = SignupForm(
         {
@@ -69,8 +69,8 @@ def signup(request):
     if form.is_valid():
         form.save()
     else:
-        message = "error"
-    return JsonResponse({"message": message})
+        messages = form.errors.as_json()
+    return JsonResponse({"message": messages})
 
 
 @api_view(["GET"])

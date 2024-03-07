@@ -54,6 +54,11 @@ function submitForm() {
           'Something went wrong. Please try again',
           'bg-red-300'
         )
+
+        const messages = JSON.parse(response.data.message)
+        for (const key in messages) {
+          errors.value.push(messages[key][0].message)
+        }
       }
     }).catch(error => {
       console.log(error)
