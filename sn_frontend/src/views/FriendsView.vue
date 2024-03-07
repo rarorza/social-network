@@ -64,7 +64,7 @@ export default {
 
         <div class="p-4 text-center bg-gray-100 rounded-lg" v-for="friendshipRequest in friendshipRequests"
           :key="friendshipRequest.id">
-          <img src="https://i.pravatar.cc/100?img=45" class="mb-6 mx-auto rounded-full">
+          <img :src="friendshipRequest.created_by.get_avatar" class="mb-6 mx-auto rounded-full">
 
           <p>
             <strong>
@@ -91,7 +91,7 @@ export default {
         v-if="friends.length">
         <div class="p-4 text-center bg-gray-100 rounded-lg" v-for="friend in friends"
           :key="friend.id">
-          <img src="https://i.pravatar.cc/300?img=45" class="mb-6 rounded-full">
+          <img :src="friend.get_avatar" class="mb-6 rounded-full">
 
           <p>
             <strong>

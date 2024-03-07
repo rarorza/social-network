@@ -40,7 +40,14 @@ def profile_edit(request):
         )
         if form.is_valid():
             form.save()
-        return JsonResponse({"message": "Information updated"})
+
+        serializer = UserSerializer(user)
+        return JsonResponse(
+            {
+                "message": "Information updated",
+                "user": serializer.data,
+            }
+        )
 
 
 @api_view(["POST"])

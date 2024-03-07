@@ -53,6 +53,7 @@ function submitForm() {
           id: userStore.user.id,
           name: form.value.name,
           email: form.value.email,
+          avatar: response.data.user.get_avatar
         })
 
         router.back()

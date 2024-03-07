@@ -61,7 +61,7 @@ const usersLength = computed(() => {
         v-if="usersLength">
         <div class="p-4 text-center bg-gray-100 rounded-lg" v-for="user in users"
           :key="user.id">
-          <img src="https://i.pravatar.cc/300?img=45" class="mb-6 rounded-full">
+          <img :src="user.get_avatar" class="mb-6 rounded-full">
 
           <p>
             <strong>

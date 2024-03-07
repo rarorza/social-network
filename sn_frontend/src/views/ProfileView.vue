@@ -63,6 +63,7 @@ export default {
 
           this.posts.unshift(response.data)
           this.body = ''
+          this.user.posts_count += 1
         }).catch(error => {
           console.log('Error', error);
         })
