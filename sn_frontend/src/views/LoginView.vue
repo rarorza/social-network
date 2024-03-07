@@ -17,6 +17,7 @@ const classes = ref('')
 
 async function submitForm() {
   errors.value = []
+  classes.value = 'bg-red-300'
 
   if (form.value.email === '') {
     errors.value.push('Your e-mail is missing')
@@ -24,7 +25,6 @@ async function submitForm() {
   if (form.value.password === '') {
     errors.value.push('Your password is missing')
   }
-  classes.value = 'bg-red-300'
 
   if (errorsLength.value === 0) {
     await axios.post('/api/login/', form.value).then(response => {
@@ -32,8 +32,11 @@ async function submitForm() {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access
     }).catch(error => {
       console.log('error', error)
+      errors.value.push('The email or password is incorrect!')
     })
-    
+  }
+
+  if (errorsLength.value === 0) {
     await axios.get('/api/me/').then(response => {
       userStore.setUserInfo(response.data)  // Store email, name and id in browser
       router.push('/feed')
