@@ -1,4 +1,5 @@
 from account.models import FriendshipResquest, User
+from django.contrib.auth.forms import PasswordChangeForm
 from django.http import JsonResponse
 from rest_framework.decorators import (
     api_view,
@@ -48,6 +49,19 @@ def profile_edit(request):
                 "user": serializer.data,
             }
         )
+
+
+@api_view(["POST"])
+def password_edit(request):
+    user = request.user
+
+    form = PasswordChangeForm(data=request.POST, user=user)
+
+    if form.is_valid():
+        form.save()
+        return JsonResponse({"message": "success"})
+    errors = form.errors.as_json()
+    return JsonResponse({"message": errors}, safe=False)
 
 
 @api_view(["POST"])

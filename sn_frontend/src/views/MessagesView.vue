@@ -63,8 +63,8 @@ onMounted(() => {
             <div class="flex items-center space-x-2">
               <template v-for="user in conversation.users" :key="user.id">
                 <template v-if="user.id !== userStore.user.id">
-                  <img :src="user.get_avatar" class="w-[40px] rounded-full">
-                  <p class="text-xs font-bold">{{ user.name }}</p>
+                  <img :src="user.get_avatar" class="w-[40px] rounded-full cursor-pointer">
+                  <p class="text-xs font-bold cursor-pointer">{{ user.name }}</p>
                 </template>
               </template>
             </div>
