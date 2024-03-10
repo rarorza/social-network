@@ -59,7 +59,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_avatar(self) -> str | None:
         if self.avatar:
             return "http://127.0.0.1:8000" + self.avatar.url
-        return
+        return "http://127.0.0.1:8000/media/avatars/placeholder_user.jpg"
 
 
 class FriendshipResquest(models.Model):

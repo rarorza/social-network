@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from . import api
+from . import api, views
 
 urlpatterns = [
     path("me/", api.me, name="me"),
@@ -21,4 +21,5 @@ urlpatterns = [
         api.handle_friendship_request,
         name="handle_request",
     ),
+    path("activate_email/", views.activate_email, name="activate_email"),
 ]

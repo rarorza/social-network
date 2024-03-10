@@ -1,5 +1,6 @@
 from account.models import FriendshipResquest, User
 from django.contrib.auth.forms import PasswordChangeForm
+from django.core.mail import send_mail
 from django.http import JsonResponse
 from rest_framework.decorators import (
     api_view,
@@ -40,7 +41,19 @@ def profile_edit(request):
             instance=user,
         )
         if form.is_valid():
-            form.save()
+            user = form.save()
+            user.is_active = False
+            user.save()
+
+            url = f"http://127.0.0.1:8000/api/activate_email/?email={user.email}&id={user.id}"  # noqa 501
+
+            send_mail(
+                "Please verify your email",
+                f"The url for activating your account is: {url}",
+                "noreply@sn.com",
+                [user.email],
+                fail_silently=False,
+            )
 
         serializer = UserSerializer(user)
         return JsonResponse(
