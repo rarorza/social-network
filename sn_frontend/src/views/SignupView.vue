@@ -39,7 +39,7 @@ function submitForm() {
       if (response.data.message === 'success') {
         toastStore.showToast(
           5000,
-          'The user is registered. Please log in',
+          'The user is registered. Please activate your account by clicking your email link.',
           'bg-emerald-500'
         )
         form.value.email = ''

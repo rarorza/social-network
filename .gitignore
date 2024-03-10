@@ -1,6 +1,12 @@
 /sn_api/static/
-/sn_api/media/
 /sn_api/project/local_settings.py
+
+/sn_api/media/*
+!/sn_api/media/
+!/sn_api/media/avatars/
+/sn_api/media/avatars/*
+!/sn_api/media/avatars/placeholder_user.jpg
+
 gunicorn-error-log
 __localcode
 /data/

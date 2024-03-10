@@ -32,7 +32,7 @@ async function submitForm() {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access
     }).catch(error => {
       console.log('error', error)
-      errors.value.push('The email or password is incorrect!')
+      errors.value.push('The email or password is incorrect! Or the user is not activated!')
     })
   }
 
