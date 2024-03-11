@@ -40,20 +40,9 @@ def profile_edit(request):
             files=request.FILES,
             instance=user,
         )
+
         if form.is_valid():
-            user = form.save()
-            user.is_active = False
             user.save()
-
-            url = f"http://127.0.0.1:8000/api/activate_email/?email={user.email}&id={user.id}"  # noqa 501
-
-            send_mail(
-                "Please verify your email",
-                f"The url for activating your account is: {url}",
-                "noreply@sn.com",
-                [user.email],
-                fail_silently=False,
-            )
 
         serializer = UserSerializer(user)
         return JsonResponse(
@@ -94,10 +83,22 @@ def signup(request):
     )
 
     if form.is_valid():
-        form.save()
+        user = form.save()
+        user.is_active = False
+        user.save()
+
+        url = f"http://127.0.0.1:8000/api/activate_email/?email={user.email}&id={user.id}"  # noqa 501
+
+        send_mail(
+            "Please verify your email",
+            f"The url for activating your account is: {url}",
+            "noreply@sn.com",
+            [user.email],
+            fail_silently=False,
+        )
     else:
         messages = form.errors.as_json()
-    return JsonResponse({"message": messages})
+    return JsonResponse({"message": messages}, safe=False)
 
 
 @api_view(["GET"])
