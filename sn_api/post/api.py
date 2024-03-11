@@ -3,7 +3,7 @@ from account.serializers import UserSerializer
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 
-from .forms import PostForm
+from .forms import AttachmentForm, PostForm
 from .models import Comment, Like, Post, Trend
 from .serializers import (
     CommentSerializer,
@@ -54,13 +54,24 @@ def post_list_profile(request, id):
 
 @api_view(["POST"])
 def post_create(request):
-    form = PostForm(request.data)
+    form_post = PostForm(request.POST)
+    form_attachment = AttachmentForm(request.POST, request.FILES)
+    attachment = None
 
-    if form.is_valid():
+    if form_attachment.is_valid():
+        print("attachment is valid")
+        attachment = form_attachment.save(commit=False)
+        attachment.created_by = request.user
+        attachment.save()
+
+    if form_post.is_valid():
         # Commit is False because we need to delay for attach the user in form
-        post = form.save(commit=False)
+        post = form_post.save(commit=False)
         post.created_by = request.user
         post.save()
+
+        if attachment:
+            post.attachments.add(attachment)
 
         user = post.created_by
         user.posts_count += 1

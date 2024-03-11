@@ -12,6 +12,11 @@ class PostAttachment(models.Model):
         User, related_name="post_attachments", on_delete=models.CASCADE
     )
 
+    def get_image(self) -> str | None:
+        if self.image:
+            return "http://127.0.0.1:8000" + self.image.url
+        return
+
 
 class Like(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

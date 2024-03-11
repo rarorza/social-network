@@ -1,7 +1,13 @@
 from account.serializers import UserSerializer
 from rest_framework import serializers
 
-from .models import Comment, Post, Trend
+from .models import Comment, Post, PostAttachment, Trend
+
+
+class PostAttachmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostAttachment
+        fields = ("id", "get_image")
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -20,6 +26,7 @@ class CommentSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
     # to show created_by.name in front end
+    attachments = PostAttachmentSerializer(read_only=True, many=True)
 
     class Meta:
         model = Post
@@ -30,12 +37,14 @@ class PostSerializer(serializers.ModelSerializer):
             "comments_count",
             "created_by",
             "created_at_formatted",
+            "attachments",
         )
 
 
 class PostDetailSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
     comments = CommentSerializer(read_only=True, many=True)
+    attachments = PostAttachmentSerializer(read_only=True, many=True)
 
     class Meta:
         model = Post
@@ -47,6 +56,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
             "created_by",
             "created_at_formatted",
             "comments",
+            "attachments",
         )
 
 
