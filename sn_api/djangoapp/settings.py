@@ -27,7 +27,10 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+if DEBUG:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 AUTH_USER_MODEL = "account.User"
 
@@ -79,6 +82,7 @@ INSTALLED_APPS = [
     "post",
     "search",
     "chat",
+    "notification",
 ]
 
 MIDDLEWARE = [

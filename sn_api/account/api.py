@@ -86,6 +86,7 @@ def signup(request):
         user = form.save()
         user.is_active = False
         user.save()
+        print(user.id, user.email)
 
         url = f"http://127.0.0.1:8000/api/activate_email/?email={user.email}&id={user.id}"  # noqa 501
 
