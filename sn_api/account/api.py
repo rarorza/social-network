@@ -171,21 +171,20 @@ def handle_friendship_request(request, id, status):
     friendship_request.status = status
     friendship_request.save()
 
-    user_sent.friends.add(user_receive)
-    user_sent.friends_count += 1
-    user_sent.save()
+    if friendship_request.status == "accepted":
+        user_sent.friends.add(user_receive)
+        user_sent.friends_count += 1
+        user_sent.save()
 
-    user_receive.friends.add(user_sent)
-    user_receive.friends_count += 1
-    user_receive.save()
-
-    if status == "accepted":
+        user_receive.friends.add(user_sent)
+        user_receive.friends_count += 1
+        user_receive.save()
         create_notification(
             request,
             "accepted_friend_request",
             friend_request_id=friendship_request.id,
         )
-    elif status == "rejected":
+    elif friendship_request.status == "rejected":
         create_notification(
             request,
             "rejected_friend_request",
