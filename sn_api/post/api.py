@@ -1,6 +1,7 @@
 from account.models import User
 from account.serializers import UserSerializer
 from django.http import JsonResponse
+from notification.utils.notifications import create_notification
 from rest_framework.decorators import api_view
 
 from .forms import AttachmentForm, PostForm
@@ -92,6 +93,8 @@ def post_like(request, id):
         post.likes_count += 1
         post.likes.add(like)
         post.save()
+
+        notification = create_notification(request, "post_like", post.id)
         return JsonResponse({"message": "like created"})
     return JsonResponse({"message": "post already liked"})
 
