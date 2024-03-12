@@ -3,7 +3,6 @@ import PeopleYouMayKnow from '@/components/PeopleYouMayKnow.vue';
 import Trends from '@/components/Trends.vue';
 import axios from 'axios';
 import FeedCard from '@/components/FeedCard.vue';
-import { routeLocationKey } from 'vue-router';
 
 export default {
   name: 'FeedView',

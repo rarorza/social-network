@@ -61,8 +61,13 @@ const router = createRouter({
     },
     {
       path: '/trends/:id',
-      name: 'trendsview',
+      name: 'trends',
       component: () => import('../views/TrendsView.vue')
+    },
+    {
+      path: '/notifications',
+      name: 'notifications',
+      component: () => import('../views/NotificationsView.vue')
     },
   ]
 })

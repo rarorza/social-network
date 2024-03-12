@@ -94,7 +94,7 @@ def post_like(request, id):
         post.likes.add(like)
         post.save()
 
-        notification = create_notification(request, "post_like", post.id)
+        create_notification(request, "post_like", post.id)
         return JsonResponse({"message": "like created"})
     return JsonResponse({"message": "post already liked"})
 
@@ -111,6 +111,8 @@ def post_create_comment(request, id):
     post.comments.add(comment)
     post.comments_count += 1
     post.save()
+
+    create_notification(request, "post_comment", post.id)
 
     comment_serializer = CommentSerializer(comment)
     return JsonResponse(comment_serializer.data, safe=False)
