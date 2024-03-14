@@ -3,6 +3,7 @@ from account.serializers import UserSerializer
 from django.http import JsonResponse
 from notification.utils.notifications import create_notification
 from rest_framework.decorators import api_view
+from utils.generate_trends import generate_trends
 
 from .forms import AttachmentForm, PostForm
 from .models import Comment, Like, Post, Trend
@@ -81,6 +82,7 @@ def post_create(request):
         user.save()
 
         serializer = PostSerializer(post)
+        generate_trends()
         return JsonResponse(serializer.data, safe=False)
     return JsonResponse(serializer.errors, status=400)
 
