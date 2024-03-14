@@ -1,12 +1,18 @@
 <script setup>
 import { useUserStore } from '@/stores/user';
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
+import { useRoute } from 'vue-router'
 
 const userStore = useUserStore()
+const route = useRoute()
 
 const isAuthenticated = computed(() => userStore.user.isAuthenticated)
 const userId = ref(userStore.user.id)
 
+
+watch(() => route.params.id, () => {
+  useUserStore()
+}, { immediate: true })
 </script>
 
 <template>

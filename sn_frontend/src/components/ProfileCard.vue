@@ -1,9 +1,9 @@
 <script setup>
-import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';
-import { ref, onMounted, watch } from 'vue'
-import { useToastStore } from '@/stores/toast';
-import { useUserStore } from '@/stores/user';
+import { useRoute, useRouter } from 'vue-router'
+import axios from 'axios'
+import { ref, watch } from 'vue'
+import { useToastStore } from '@/stores/toast'
+import { useUserStore } from '@/stores/user'
 
 const toastStore = useToastStore()
 const userStore = useUserStore()
@@ -37,6 +37,7 @@ function sendFriendshipRequest() {
         'The request was sent!',
         'bg-emerald-300'
       )
+      canSend.value = false
     }
   }).catch(error => {
     console.log('error', error)
@@ -58,7 +59,7 @@ function logout() {
 }
 
 watch(() => route.params.id, () => {
-  canSendFriendshipRequest();
+  canSendFriendshipRequest()
 }, { immediate: true })
 </script>
 
