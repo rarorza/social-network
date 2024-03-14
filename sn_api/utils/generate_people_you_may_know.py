@@ -1,5 +1,6 @@
 import os
 import sys
+from typing import Type
 
 import django
 
@@ -10,23 +11,13 @@ django.setup()
 from account.models import User
 
 
-def generate_suggestions() -> None:
-    users = User.objects.all()
+def generate_friendship_suggestions(user: Type[User]) -> None:
+    user.people_you_may_know.clear()
 
-    for user in users:
-        user.people_you_may_know.clear()
-
-        print("Find friends for: ", user)
-        for friend in user.friends.all():
-            print("Is friend with: ", friend)
-            for friend_of_friend in friend.friends.all():
-                if (
-                    friend_of_friend not in user.friends.all()
-                    and friend_of_friend != user
-                ):
-                    print("Suggest: ", friend_of_friend)
-                    user.people_you_may_know.add(friend_of_friend)
-
-
-if __name__ == "main":
-    generate_suggestions()
+    print("Find friends for: ", user)
+    for friend in user.friends.all():
+        print("Is friend with: ", friend)
+        for friend_of_friend in friend.friends.all():
+            if friend_of_friend not in user.friends.all() and friend_of_friend != user:
+                print("Suggest: ", friend_of_friend)
+                user.people_you_may_know.add(friend_of_friend)

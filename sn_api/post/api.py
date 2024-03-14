@@ -28,7 +28,6 @@ def post_list(request):
     else:
         posts = Post.objects.filter(created_by_id__in=list(feed_users_ids))
     serializer = PostSerializer(posts, many=True)
-
     return JsonResponse(serializer.data, safe=False)
 
 
