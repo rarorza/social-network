@@ -8,6 +8,7 @@ from rest_framework.decorators import (
     authentication_classes,
     permission_classes,
 )
+from utils.generate_people_you_may_know import generate_suggestions
 
 from .forms import ProfileForm, SignupForm
 from .serializers import FriendshipResquestSerializer, UserSerializer
@@ -52,6 +53,13 @@ def profile_edit(request):
                 "user": serializer.data,
             }
         )
+
+
+@api_view(["GET"])
+def my_friendship_suggestions(request):
+    people_you_may_know = request.user.people_you_may_know.all()
+    serializer = UserSerializer(people_you_may_know, many=True)
+    return JsonResponse(serializer.data, safe=False)
 
 
 @api_view(["POST"])
@@ -190,5 +198,6 @@ def handle_friendship_request(request, id, status):
             "rejected_friend_request",
             friend_request_id=friendship_request.id,
         )
+    generate_suggestions()
 
     return JsonResponse({"message": "friendship request updated"})

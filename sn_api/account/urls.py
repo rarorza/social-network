@@ -17,6 +17,11 @@ urlpatterns = [
         name="send_friendship_request",
     ),
     path(
+        "friends/suggestions/",
+        api.my_friendship_suggestions,
+        name="my_friendship_suggestions",
+    ),
+    path(
         "friends/<uuid:id>/<str:status>/",
         api.handle_friendship_request,
         name="handle_request",
