@@ -15,6 +15,7 @@ export default {
     return {
       posts: [],
       body: '',
+      url: null,
     }
   },
   mounted() {
@@ -23,26 +24,37 @@ export default {
   methods: {
     getFeed() {
       axios.get('/api/posts/').then(response => {
-        console.log('data', response.data)
         this.posts = response.data
       }).catch(error => {
         console.log('Error', error);
       })
     },
     submitForm() {
-      if (this.body != '') {
-        axios.post('/api/posts/create/', {
-          'body': this.body
+      let formData = new FormData()
+      formData.append('image', this.$refs.file.files[0])
+      formData.append('body', this.body)
+
+      if (this.body !== '') {
+        axios.post('/api/posts/create/', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }
         }).then(response => {
           console.log('data', response)
 
           this.posts.unshift(response.data)
           this.body = ''
+          this.url = null
+          this.$refs.fiels.value = null
         }).catch(error => {
           console.log('Error', error);
         })
       }
-    }
+    },
+    onFileChange(event) {
+      const file = event.target.files[0]
+      this.url = URL.createObjectURL(file)
+    },
   }
 }
 </script>
@@ -57,12 +69,19 @@ export default {
               placeholder="What are you thinking about?"></textarea>
           </div>
 
-          <div class="p-4 border-t border-gray-100 flex justify-between">
-            <a href="#"
-              class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg">Attach
-              image</a>
+          <div class="preview" v-if="url">
+            <img :src="url" class="w-[100px] my-3 mx-4 rounded-xl">
+          </div>
 
-            <button class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Post</button>
+          <div class="p-4 border-t border-gray-100 flex justify-between">
+            <label
+              class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg">
+              <input type="file" ref="file" @change="onFileChange"
+                accept="image/*" class="file-input py-2"> Attach image
+            </label>
+
+            <button href="#"
+              class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Post</button>
           </div>
         </form>
       </div>
@@ -79,3 +98,9 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+input[type="file"] {
+  display: none;
+}
+</style>
