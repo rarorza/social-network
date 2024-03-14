@@ -1,5 +1,20 @@
 <script setup>
+import axios from 'axios'
+import { ref, onMounted} from 'vue'
 
+const users = ref([])
+
+function getFriendSuggestions() {
+  axios.get('/api/friends/suggestions/').then(response => {
+    users.value = response.data
+  }).catch(error => {
+    console.log('Error: ', error)
+  })
+}
+
+onMounted(() => {
+  getFriendSuggestions()
+})
 </script>
 
 <template>
@@ -7,16 +22,16 @@
     <h3 class="mb-6 text-xl">People you may know</h3>
 
     <div class="space-y-4">
-      <div class="flex items-center justify-between">
+      <div v-for="user in users" :key="user.id" class="flex items-center justify-between">
         <div class="flex items-center space-x-2">
-          <img src="https://i.pravatar.cc/300?img=60"
+          <img :src="user.get_avatar"
             class="w-[40px] rounded-full">
 
-          <p class="text-xs"><strong>Name placeholder</strong></p>
+          <p class="text-xs"><strong>{{ user.name }}</strong></p>
         </div>
 
-        <a href="#"
-          class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Show</a>
+        <RouterLink :to="{ name: 'profile', params: { 'id': user.id } }"
+          class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Show</RouterLink>
       </div>
     </div>
   </div>
