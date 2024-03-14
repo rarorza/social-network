@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import FriendshipResquest, User
+from .models import FriendshipRequest, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -16,10 +16,10 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
 
-class FriendshipResquestSerializer(serializers.ModelSerializer):
+class FriendshipRequestSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
     # This makes 'created_by' return fields only from the 'UserSerializer'
 
     class Meta:
-        model = FriendshipResquest
+        model = FriendshipRequest
         fields = ("id", "created_by")

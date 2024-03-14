@@ -47,7 +47,10 @@ def post_list_profile(request, id):
     user_serialize = UserSerializer(user)
 
     return JsonResponse(
-        {"posts": posts_serializer.data, "user": user_serialize.data},
+        {
+            "posts": posts_serializer.data,
+            "user": user_serialize.data,
+        },
         safe=False,
     )
 

@@ -1,4 +1,5 @@
 import uuid
+from typing import Type
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.db import models
@@ -63,7 +64,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return "http://127.0.0.1:8000/media/avatars/placeholder_user.jpg"
 
 
-class FriendshipResquest(models.Model):
+class FriendshipRequest(models.Model):
     SENT = "sent"
     ACCEPTED = "accepted"
     REJECTED = "rejected"
@@ -91,3 +92,24 @@ class FriendshipResquest(models.Model):
         choices=STATUS_CHOICES,
         default=SENT,
     )
+
+    @classmethod
+    def can_send_friend_request(
+        cls, user_visitor: Type[User], user_guest: Type[User]
+    ) -> bool:
+        can_send = True
+
+        check_invite_from_visitor = FriendshipRequest.objects.filter(
+            created_for=user_visitor
+        ).filter(created_by=user_guest)
+        check_invite_from_guest = FriendshipRequest.objects.filter(
+            created_for=user_guest
+        ).filter(created_by=user_visitor)
+
+        if (
+            check_invite_from_visitor
+            or check_invite_from_guest
+            or user_visitor in user_guest.friends.all()
+        ):
+            can_send = False
+        return can_send

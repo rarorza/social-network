@@ -1,6 +1,7 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
+import { ref, onMounted, watch } from 'vue'
 import { useToastStore } from '@/stores/toast';
 import { useUserStore } from '@/stores/user';
 
@@ -10,6 +11,16 @@ const userStore = useUserStore()
 const route = useRoute()
 const router = useRouter()
 const props = defineProps({ user: Object })
+const canSend = ref(null)
+
+function canSendFriendshipRequest(id) {
+  axios.get(`/api/friends/can_send_friend_request/${route.params.id}/`).then(response => {
+    console.log('data can send', response.data);
+    canSend.value = response.data.can_send_friend_request
+  }).catch(error => {
+    console.log('error', error)
+  })
+}
 
 function sendFriendshipRequest() {
   axios.post(`/api/friends/${route.params.id}/request/`).then(response => {
@@ -45,6 +56,10 @@ function logout() {
   userStore.removeToken()
   router.push('/login')
 }
+
+watch(() => route.params.id, () => {
+  canSendFriendshipRequest();
+}, { immediate: true })
 </script>
 
 <template>
@@ -62,7 +77,7 @@ function logout() {
       </div>
 
       <div class="mt-6">
-        <button v-if="userStore.user.id !== props.user.id"
+        <button v-if="userStore.user.id !== props.user.id && canSend"
           @click="sendFriendshipRequest"
           class="inline-block py-4 px-3 bg-purple-600 text-xs text-white rounded-lg">
           Follow

@@ -1,6 +1,6 @@
 from typing import Type
 
-from account.models import FriendshipResquest
+from account.models import FriendshipRequest
 from notification.models import Notification
 from post.models import Post
 
@@ -19,15 +19,15 @@ def create_notification(
         post = Post.objects.get(pk=post_id)
         created_for = post.created_by
     elif type_of_notification == "new_friend_request":
-        frend_request = FriendshipResquest.objects.get(pk=friend_request_id)
+        frend_request = FriendshipRequest.objects.get(pk=friend_request_id)
         created_for = frend_request.created_for
         body = f"{request.user.name} send you a friend request!"
     elif type_of_notification == "accepted_friend_request":
-        frend_request = FriendshipResquest.objects.get(pk=friend_request_id)
+        frend_request = FriendshipRequest.objects.get(pk=friend_request_id)
         created_for = frend_request.created_for
         body = f"{request.user.name} accepted your friend request!"
     elif type_of_notification == "rejected_friend_request":
-        frend_request = FriendshipResquest.objects.get(pk=friend_request_id)
+        frend_request = FriendshipRequest.objects.get(pk=friend_request_id)
         created_for = frend_request.created_for
         body = f"{request.user.name} rejected your friend request!"
 

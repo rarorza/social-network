@@ -1,4 +1,4 @@
-from account.models import FriendshipResquest, User
+from account.models import FriendshipRequest, User
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.mail import send_mail
 from django.http import JsonResponse
@@ -11,7 +11,7 @@ from rest_framework.decorators import (
 from utils.generate_people_you_may_know import generate_friendship_suggestions
 
 from .forms import ProfileForm, SignupForm
-from .serializers import FriendshipResquestSerializer, UserSerializer
+from .serializers import FriendshipRequestSerializer, UserSerializer
 
 
 @api_view(["GET"])
@@ -56,7 +56,7 @@ def profile_edit(request):
 
 
 @api_view(["GET"])
-def my_friendship_suggestions(request):
+def friendship_suggestions(request):
     generate_friendship_suggestions(request.user)
     people_you_may_know = request.user.people_you_may_know.all()
     serializer = UserSerializer(people_you_may_know, many=True)
@@ -118,14 +118,14 @@ def friends(request, id):
     friendship_requests = []
 
     if user == request.user:
-        friendship_requests = FriendshipResquest.objects.filter(
-            created_for=request.user, status=FriendshipResquest.SENT
+        friendship_requests = FriendshipRequest.objects.filter(
+            created_for=request.user, status=FriendshipRequest.SENT
         )
     friends = user.friends.all()
 
     user_serializer = UserSerializer(user)
     friends_serializer = UserSerializer(friends, many=True)
-    friendship_requests_serializer = FriendshipResquestSerializer(
+    friendship_requests_serializer = FriendshipRequestSerializer(
         friendship_requests,
         many=True,
     )
@@ -144,17 +144,13 @@ def friends(request, id):
 def send_friendship_request(request, id):
     user_receiver = User.objects.get(pk=id)
     user_sender = request.user
+    can_sent = FriendshipRequest.can_send_friend_request(
+        user_sender,
+        user_receiver,
+    )
 
-    check_invite_from_receiver = FriendshipResquest.objects.filter(
-        created_for=user_receiver
-    ).filter(created_by=user_sender)
-
-    check_invite_from_sender = FriendshipResquest.objects.filter(
-        created_for=user_sender
-    ).filter(created_by=user_receiver)
-
-    if not check_invite_from_receiver or not check_invite_from_sender:
-        friendship_request = FriendshipResquest.objects.create(
+    if can_sent:
+        friendship_request = FriendshipRequest.objects.create(
             created_for=user_receiver,
             created_by=user_sender,
         )
@@ -169,14 +165,23 @@ def send_friendship_request(request, id):
     return JsonResponse({"message": "request already sent"})
 
 
+@api_view(["GET"])
+def can_send_friend_request(request, id):
+    # checks if already exists visitor or guest invite
+    user = User.objects.get(pk=id)
+    print("can_send", "---------------")
+    can_send = FriendshipRequest.can_send_friend_request(request.user, user)
+    return JsonResponse({"can_send_friend_request": can_send}, safe=False)
+
+
 @api_view(["POST"])
 def handle_friendship_request(request, id, status):
     user_sent = User.objects.get(pk=id)
     user_receive = request.user
 
-    friendship_request = FriendshipResquest.objects.filter(
-        created_for=user_receive
-    ).get(created_by=user_sent)
+    friendship_request = FriendshipRequest.objects.filter(created_for=user_receive).get(
+        created_by=user_sent
+    )
     friendship_request.status = status
     friendship_request.save()
 
