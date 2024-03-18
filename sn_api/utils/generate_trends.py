@@ -19,14 +19,16 @@ def extract_hashtags(text: str, trends: list) -> list:
     return trends
 
 
-def generate_trends():
+def generate_trends() -> None:
     for trend in Trend.objects.all():
         trend.delete()
 
     trends = []
     this_hour = timezone.now().replace(minute=0, second=0, microsecond=0)
     twenty_for_hours = this_hour - timedelta(hours=24)
-    posts = Post.objects.filter(created_at__gte=twenty_for_hours)
+    posts = Post.objects.filter(created_at__gte=twenty_for_hours).filter(
+        is_private=False
+    )
 
     for post in posts:
         extract_hashtags(post.body, trends)

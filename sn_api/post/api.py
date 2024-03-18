@@ -1,5 +1,6 @@
 from account.models import User
 from account.serializers import UserSerializer
+from django.db.models import Q
 from django.http import JsonResponse
 from notification.utils.notifications import create_notification
 from rest_framework.decorators import api_view
@@ -25,7 +26,9 @@ def post_list(request):
 
     trend = request.GET.get("trend", "")
     if trend:
-        posts = Post.objects.filter(body__icontains="#" + trend)
+        posts = Post.objects.filter(body__icontains="#" + trend).filter(
+            is_private=False
+        )
     else:
         posts = Post.objects.filter(created_by_id__in=list(feed_users_ids))
     serializer = PostSerializer(posts, many=True)
@@ -34,18 +37,29 @@ def post_list(request):
 
 @api_view(["GET"])
 def post_detail(request, id):
-    post = Post.objects.get(pk=id)
+    user = request.user
+    users_ids = [user.id]
+
+    for friend in request.user.friends.all():
+        users_ids.append(friend.id)
+
+    post = Post.objects.filter(
+        Q(created_by_id__in=list(users_ids)) | Q(is_private=False)
+    ).get(pk=id)
     post_serializer = PostDetailSerializer(post)
     return JsonResponse({"post": post_serializer.data})
 
 
 @api_view(["GET"])
 def post_list_profile(request, id):
-    user = User.objects.get(pk=id)
+    user_profile = User.objects.get(pk=id)
     posts = Post.objects.filter(created_by_id=id)
 
+    if request.user not in user_profile.friends.all():
+        posts = Post.objects.filter(created_by_id=id).filter(is_private=False)
+
     posts_serializer = PostSerializer(posts, many=True)
-    user_serialize = UserSerializer(user)
+    user_serialize = UserSerializer(user_profile)
 
     return JsonResponse(
         {

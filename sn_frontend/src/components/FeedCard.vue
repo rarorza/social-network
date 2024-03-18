@@ -17,11 +17,13 @@ function likePost(id) {
 <template>
   <div class="mb-6 flex items-center justify-between">
     <div class="flex items-center space-x-6">
-      <RouterLink :to="{ name: 'profile', params: { 'id': post.created_by.id } }">
+      <RouterLink
+        :to="{ name: 'profile', params: { 'id': post.created_by.id } }">
         <img :src="post.created_by.get_avatar" class="w-[40px] rounded-full">
       </RouterLink>
 
-      <RouterLink :to="{ name: 'profile', params: { 'id': post.created_by.id } }">
+      <RouterLink
+        :to="{ name: 'profile', params: { 'id': post.created_by.id } }">
         <p><strong>{{ post.created_by.name }}</strong></p>
       </RouterLink>
     </div>
@@ -31,12 +33,14 @@ function likePost(id) {
 
   <p>{{ post.body }}</p>
   <template v-if="post.attachments.length">
-    <img v-for="image in post.attachments" :key="image.id" :src="image.get_image" class="w-full mb-4 rounded-xl">
+    <img v-for="image in post.attachments" :key="image.id"
+      :src="image.get_image" class="w-full mb-4 rounded-xl">
   </template>
 
   <div class="my-6 flex justify-between">
     <div class="flex space-x-6">
-      <div class="flex items-center space-x-2 cursor-pointer" @click="likePost(post.id)">
+      <div class="flex items-center space-x-2 cursor-pointer"
+        @click="likePost(post.id)">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
           stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
           <path stroke-linecap="round" stroke-linejoin="round"
@@ -47,7 +51,8 @@ function likePost(id) {
         <span class="text-gray-500 text-xs">{{ post.likes_count }} likes</span>
       </div>
 
-      <RouterLink :to="{name: 'post', params: {id: post.id}}" class="flex items-center space-x-2">
+      <RouterLink :to="{ name: 'post', params: { id: post.id } }"
+        class="flex items-center space-x-2">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
           stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
           <path stroke-linecap="round" stroke-linejoin="round"
@@ -55,8 +60,19 @@ function likePost(id) {
           </path>
         </svg>
 
-        <span class="text-gray-500 text-xs">{{ post.comments_count }} comments</span>
+        <span class="text-gray-500 text-xs">{{ post.comments_count }}
+          comments</span>
       </RouterLink>
+
+      <div v-if="post.is_private" class="flex items-center space-x-2 text-gray-500 text-xs">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+          </svg>
+          <span>Is private</span>
+      </div>
     </div>
 
     <div>

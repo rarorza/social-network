@@ -28,6 +28,7 @@ export default {
       },
       body: '',
       url: null,
+      isPrivate: false,
     }
   },
   mounted() {
@@ -59,6 +60,7 @@ export default {
       let formData = new FormData()
       formData.append('image', this.$refs.file.files[0])
       formData.append('body', this.body)
+      formData.append('is_private', this.isPrivate)
 
       if (this.body != '') {
         axios.post('/api/posts/create/', formData, {
@@ -71,6 +73,7 @@ export default {
           this.posts.unshift(response.data)
           this.body = ''
           this.url = null
+          this.isPrivate = false
           this.$refs.fiels.value = null
           this.user.posts_count += 1
         }).catch(error => {
@@ -97,6 +100,10 @@ export default {
           <div class="p-4">
             <textarea v-model="body" class="p-4 w-full bg-gray-100 rounded-lg"
               placeholder="What are you thinking about?"></textarea>
+            
+            <label>
+              <input type="checkbox" v-model="isPrivate"> Private
+            </label>
           </div>
 
           <div class="preview" v-if="url">
