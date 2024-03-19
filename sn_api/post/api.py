@@ -136,6 +136,13 @@ def post_create_comment(request, id):
     return JsonResponse(comment_serializer.data, safe=False)
 
 
+@api_view(["DELETE"])
+def post_delete(request, id):
+    post = Post.objects.filter(created_by=request.user).get(pk=id)
+    post.delete()
+    return JsonResponse({"message": "post deleted"})
+
+
 @api_view(["GET"])
 def get_trends(request):
     trends = Trend.objects.all()
