@@ -33,7 +33,6 @@ export default {
       axios.delete(`/api/posts/delete/${id}/`).then(response => {
         if (response.data.message == 'post deleted') {
           this.posts = this.posts.filter(post => post.id !== id)
-          this.post.likes_count -= 1
         }
       }).catch(error => {
         console.log('error', error)

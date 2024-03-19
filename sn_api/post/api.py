@@ -139,6 +139,10 @@ def post_create_comment(request, id):
 @api_view(["DELETE"])
 def post_delete(request, id):
     post = Post.objects.filter(created_by=request.user).get(pk=id)
+    user = post.created_by
+    user.posts_count -= 1
+
+    user.save()
     post.delete()
     return JsonResponse({"message": "post deleted"})
 

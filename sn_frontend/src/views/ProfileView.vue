@@ -55,6 +55,16 @@ export default {
         console.log('Error', error);
       })
     },
+    deletePost(id) {
+      axios.delete(`/api/posts/delete/${id}/`).then(response => {
+        if (response.data.message == 'post deleted') {
+          this.posts = this.posts.filter(post => post.id !== id)
+          this.user.posts_count -= 1
+        }
+      }).catch(error => {
+        console.log('error', error)
+      })
+    },
   }
 }
 </script>
@@ -71,7 +81,7 @@ export default {
 
       <div class="p-4 bg-white border border-gray-200 rounded-lg"
         v-for="post in posts" :key="post.id">
-        <FeedCard :post="post" />
+        <FeedCard :post="post" @deletePost="deletePost" />
       </div>
     </div>
 
