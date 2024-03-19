@@ -1,9 +1,9 @@
 <script setup>
-import { ref, computed } from 'vue';
-import { useToastStore } from '@/stores/toast';
-import axios from 'axios';
-import FlashNotification from '@/components/FlashNotification.vue';
-import { useRouter } from 'vue-router';
+import { ref, computed } from 'vue'
+import { useToastStore } from '@/stores/toast'
+import axios from 'axios'
+import FlashNotification from '@/components/FlashNotification.vue'
+import { useRouter } from 'vue-router'
 
 const toastStore = useToastStore()
 const router = useRouter()

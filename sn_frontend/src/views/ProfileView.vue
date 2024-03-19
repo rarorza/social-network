@@ -2,6 +2,7 @@
 import PeopleYouMayKnow from '@/components/PeopleYouMayKnow.vue'
 import Trends from '@/components/Trends.vue'
 import { useUserStore } from '@/stores/user'
+import { useToastStore } from '@/stores/toast'
 import axios from 'axios'
 import ProfileCard from '@/components/ProfileCard.vue'
 import FeedCard from '@/components/FeedCard.vue'
@@ -11,8 +12,10 @@ export default {
   name: 'ProfileView',
   setup() {
     const userStore = useUserStore()
+    const toastStore = useToastStore()
     return {
-      userStore
+      userStore,
+      toastStore
     }
   },
   components: {
@@ -60,6 +63,24 @@ export default {
         if (response.data.message == 'post deleted') {
           this.posts = this.posts.filter(post => post.id !== id)
           this.user.posts_count -= 1
+          this.toastStore.showToast(
+            5000,
+            'The post was deleted.',
+            'bg-emerald-500'
+          )
+        }
+      }).catch(error => {
+        console.log('error', error)
+      })
+    },
+    reportPost(id) {
+      axios.post(`/api/posts/report/${id}/`).then(response => {
+        if (response.data.message == 'post reported') {
+          this.toastStore.showToast(
+            5000,
+            'The post was reported.',
+            'bg-emerald-500'
+          )
         }
       }).catch(error => {
         console.log('error', error)
@@ -81,7 +102,7 @@ export default {
 
       <div class="p-4 bg-white border border-gray-200 rounded-lg"
         v-for="post in posts" :key="post.id">
-        <FeedCard :post="post" @deletePost="deletePost" />
+        <FeedCard :post="post" @deletePost="deletePost" @reportPost="reportPost"/>
       </div>
     </div>
 

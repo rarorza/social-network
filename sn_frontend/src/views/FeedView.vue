@@ -4,6 +4,7 @@ import Trends from '@/components/Trends.vue'
 import axios from 'axios'
 import FeedCard from '@/components/FeedCard.vue'
 import FormCreatePost from '@/components/FormCreatePost.vue'
+import { useToastStore } from '@/stores/toast'
 
 export default {
   name: 'FeedView',
@@ -12,6 +13,12 @@ export default {
     Trends,
     FeedCard,
     FormCreatePost
+  },
+  setup() {
+    const toastStore = useToastStore()
+    return {
+      toastStore
+    }
   },
   data() {
     return {
@@ -33,6 +40,24 @@ export default {
       axios.delete(`/api/posts/delete/${id}/`).then(response => {
         if (response.data.message == 'post deleted') {
           this.posts = this.posts.filter(post => post.id !== id)
+          this.toastStore.showToast(
+            5000,
+            'The post was deleted.',
+            'bg-emerald-500'
+          )
+        }
+      }).catch(error => {
+        console.log('error', error)
+      })
+    },
+    reportPost(id) {
+      axios.post(`/api/posts/report/${id}/`).then(response => {
+        if (response.data.message == 'post reported') {
+          this.toastStore.showToast(
+            5000,
+            'The post was reported.',
+            'bg-emerald-500'
+          )
         }
       }).catch(error => {
         console.log('error', error)
@@ -51,7 +76,8 @@ export default {
 
       <div class="p-4 bg-white border border-gray-200 rounded-lg"
         v-for="post in posts" :key="post.id">
-        <FeedCard :post="post" @deletePost="deletePost" />
+        <FeedCard :post="post" @deletePost="deletePost"
+          @reportPost="reportPost" />
       </div>
     </div>
 
